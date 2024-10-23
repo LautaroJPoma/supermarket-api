@@ -74,4 +74,12 @@ public class Product {
         this.quantity = quantity;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
 }

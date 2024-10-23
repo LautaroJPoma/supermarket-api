@@ -18,6 +18,22 @@ public class PurchaseOrder {
     private Long id;
     private Double total;
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;

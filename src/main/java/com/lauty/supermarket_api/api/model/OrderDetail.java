@@ -20,6 +20,14 @@ public class OrderDetail {
     @JoinColumn(name = "purchase_order_id")
     private PurchaseOrder purchaseOrder;
 
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
     public OrderDetail() {
     }
 
