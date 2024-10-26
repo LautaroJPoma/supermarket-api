@@ -23,6 +23,14 @@ public class Client {
     public Client() {
     }
 
+    public List<PurchaseOrder> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<PurchaseOrder> orders) {
+        this.orders = orders;
+    }
+
     public Client(Long id, String name, String email) {
         this.id = id;
         this.name = name;

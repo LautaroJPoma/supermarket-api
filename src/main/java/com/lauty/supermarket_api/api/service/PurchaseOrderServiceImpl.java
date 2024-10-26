@@ -8,69 +8,96 @@ import org.springframework.stereotype.Service;
 import com.lauty.supermarket_api.api.dto.PurchaseOrderDTO;
 import com.lauty.supermarket_api.api.mapper.PurchaseOrderMapper;
 import com.lauty.supermarket_api.api.model.PurchaseOrder;
+import com.lauty.supermarket_api.api.repository.ClientRepository;
 import com.lauty.supermarket_api.api.repository.PurchaseOrderRepository;
 
+import com.lauty.supermarket_api.api.model.Client;
 @Service
 public class PurchaseOrderServiceImpl implements PurchaseOrderService {
-    private final PurchaseOrderRepository purcharseOrderRepository;
-    private final PurchaseOrderMapper purcharseOrderMapper;
+    private final PurchaseOrderRepository purchaseOrderRepository;
+    private final PurchaseOrderMapper purchaseOrderMapper;
+    private final ClientRepository clientRepository;
 
 
-    public PurchaseOrderServiceImpl(PurchaseOrderMapper purcharseOrderMapper, PurchaseOrderRepository purcharseOrderRepository) {
-        this.purcharseOrderRepository = purcharseOrderRepository;
-        this.purcharseOrderMapper = purcharseOrderMapper;
+    public PurchaseOrderServiceImpl(PurchaseOrderMapper purchaseOrderMapper, PurchaseOrderRepository purchaseOrderRepository , ClientRepository clientRepository) {
+        this.purchaseOrderRepository = purchaseOrderRepository;
+        this.purchaseOrderMapper = purchaseOrderMapper;
+        this.clientRepository = clientRepository;
     }
 
     @Override
     public PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) {
-        PurchaseOrder purchaseOrder = purcharseOrderMapper.toEntity(purchaseOrderDTO);
-        PurchaseOrder savedPurchaseOrder = purcharseOrderRepository.save(purchaseOrder);
-        return purcharseOrderMapper.toDTO(savedPurchaseOrder);
-    }
+        PurchaseOrder purchaseOrder = purchaseOrderMapper.toEntity(purchaseOrderDTO);
 
+        // Recuperar el cliente y asignarlo a la orden de compra
+        Client client = (Client) clientRepository.findById(purchaseOrderDTO.getClientId()).orElse(null);
+        if (client != null) {
+            purchaseOrder.setClient(client);
+        }
+
+        PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.save(purchaseOrder);
+        return purchaseOrderMapper.toDTO(savedPurchaseOrder);
+    }
 
     @Override
     public PurchaseOrderDTO getPurchaseOrderById(Long id) {
-        PurchaseOrder purchaseOrder = purcharseOrderRepository.findById(id).orElse(null);
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         if (purchaseOrder == null) {
             return null;
         }
-        return purcharseOrderMapper.toDTO(purchaseOrder);
+        return purchaseOrderMapper.toDTO(purchaseOrder);
     }
 
 
     @Override
     public List<PurchaseOrderDTO> getAllPurchaseOrders() {
-        Iterable<PurchaseOrder> purchaseOrdersIterable = purcharseOrderRepository.findAll();
+        Iterable<PurchaseOrder> purchaseOrdersIterable = purchaseOrderRepository.findAll();
         List<PurchaseOrderDTO> purchaseOrderDTOs = new ArrayList<>();
         for (PurchaseOrder purchaseOrder : purchaseOrdersIterable) {
-            purchaseOrderDTOs.add(purcharseOrderMapper.toDTO(purchaseOrder));
+            purchaseOrderDTOs.add(purchaseOrderMapper.toDTO(purchaseOrder));
         }
         return purchaseOrderDTOs;
     }
 
 
     @Override
-    public PurchaseOrderDTO updatePurchaseOrder(Long id, PurchaseOrderDTO purchaseOrderDTO) {
-        PurchaseOrder existingPurchaseOrder = purcharseOrderRepository.findById(id).orElse(null);
-        if (existingPurchaseOrder == null) {
-            return null; // Retorna null si no se encuentra
-        }
-
-        // Actualiza los campos
-        existingPurchaseOrder.setTotal(purchaseOrderDTO.getTotal());
-
-        // Guarda y retorna el PurchaseOrder actualizado
-        PurchaseOrder updatedPurchaseOrder = purcharseOrderRepository.save(existingPurchaseOrder);
-        return purcharseOrderMapper.toDTO(updatedPurchaseOrder);
+public PurchaseOrderDTO updatePurchaseOrder(Long id, PurchaseOrderDTO purchaseOrderDTO) {
+    // Asegúrate de que el id proporcionado no sea null
+    if (id == null) {
+        throw new IllegalArgumentException("El ID de la orden de compra no puede ser null");
     }
+
+    // Buscar la orden de compra existente
+    PurchaseOrder existingPurchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
+    if (existingPurchaseOrder == null) {
+        return null; // Retorna null si no se encuentra
+    }
+
+    // Actualizar el total
+    existingPurchaseOrder.setTotal(purchaseOrderDTO.getTotal());
+
+    // Asignar el cliente si el clientId está presente en el DTO
+    if (purchaseOrderDTO.getClientId() != null) {
+        Client client = clientRepository.findById(purchaseOrderDTO.getClientId()).orElse(null);
+        if (client != null) {
+            existingPurchaseOrder.setClient(client);
+        } else {
+            throw new IllegalArgumentException("Cliente con el ID proporcionado no existe");
+        }
+    }
+
+    // Guardar y devolver la entidad actualizada
+    PurchaseOrder updatedPurchaseOrder = purchaseOrderRepository.save(existingPurchaseOrder);
+    return purchaseOrderMapper.toDTO(updatedPurchaseOrder);
+}
+
 
 
     @Override
     public void deletePurchaseOrder(Long id) {
-        PurchaseOrder purchaseOrder = purcharseOrderRepository.findById(id).orElse(null);
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         if (purchaseOrder != null) {
-            purcharseOrderRepository.delete(purchaseOrder);
+            purchaseOrderRepository.delete(purchaseOrder);
         }
     }
 

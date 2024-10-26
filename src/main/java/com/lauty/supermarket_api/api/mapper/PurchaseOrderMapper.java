@@ -12,7 +12,12 @@ public class PurchaseOrderMapper {
         PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
         purchaseOrderDTO.setId(purchaseOrder.getId());
         purchaseOrderDTO.setTotal(purchaseOrder.getTotal());
-        purchaseOrderDTO.setClientId(purchaseOrder.getClient().getId());
+        
+        // Verificación para evitar NullPointerException si el cliente es nulo
+        if (purchaseOrder.getClient() != null) {
+            purchaseOrderDTO.setClientId(purchaseOrder.getClient().getId());
+        }
+
         return purchaseOrderDTO;
     }
 
@@ -24,3 +29,4 @@ public class PurchaseOrderMapper {
         return purchaseOrder;
     }
 }
+

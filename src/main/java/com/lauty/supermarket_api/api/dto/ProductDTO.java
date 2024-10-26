@@ -7,6 +7,14 @@ public class ProductDTO {
     private String description;
     private Double price;
     private Long categoryId;
+    private Integer quantity;
+    
+    public Integer getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
     public Long getId() {
         return id;
     }

@@ -18,6 +18,13 @@ public class PurchaseOrder {
     private Long id;
     private Double total;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
+    @OneToMany(mappedBy = "purchaseOrder")
+    private List<OrderDetail> orderDetails;
+
     public Client getClient() {
         return client;
     }
@@ -33,13 +40,6 @@ public class PurchaseOrder {
     public void setOrderDetails(List<OrderDetail> orderDetails) {
         this.orderDetails = orderDetails;
     }
-
-    @ManyToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
-
-    @OneToMany(mappedBy = "purchaseOrder")
-    private List<OrderDetail> orderDetails;
 
     public PurchaseOrder() {
     }
