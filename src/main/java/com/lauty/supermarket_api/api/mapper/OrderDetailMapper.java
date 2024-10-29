@@ -12,7 +12,14 @@ public class OrderDetailMapper {
         OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
         orderDetailDTO.setId(orderDetail.getId());
         orderDetailDTO.setQuantity(orderDetail.getQuantity());
-        orderDetailDTO.setPurchaseOrderId(orderDetail.getPurchaseOrder().getId());
+        
+        // Verificación de nulidad para evitar NullPointerException
+        if (orderDetail.getPurchaseOrder() != null) {
+            orderDetailDTO.setPurchaseOrderId(orderDetail.getPurchaseOrder().getId());
+        } else {
+            orderDetailDTO.setPurchaseOrderId(null);
+        }
+
         return orderDetailDTO;
     }
 
@@ -20,7 +27,7 @@ public class OrderDetailMapper {
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setId(orderDetailDTO.getId());
         orderDetail.setQuantity(orderDetailDTO.getQuantity());
-        // La PurchaseOrder debe ser asignada por el servicio, no aquí
+        // La asignación de PurchaseOrder debe realizarse en el servicio
         return orderDetail;
     }
 }

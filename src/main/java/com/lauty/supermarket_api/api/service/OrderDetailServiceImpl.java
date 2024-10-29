@@ -4,30 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.lauty.supermarket_api.api.dto.OrderDetailDTO;
 import com.lauty.supermarket_api.api.mapper.OrderDetailMapper;
 import com.lauty.supermarket_api.api.model.OrderDetail;
+import com.lauty.supermarket_api.api.model.PurchaseOrder;
 import com.lauty.supermarket_api.api.repository.OrderDetailRepository;
+import com.lauty.supermarket_api.api.repository.PurchaseOrderRepository;
 
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
 
     private final OrderDetailRepository orderDetailRepository;
     private final OrderDetailMapper orderDetailMapper;
+    private final PurchaseOrderRepository purchaseOrderRepository;
 
-    public OrderDetailServiceImpl(OrderDetailMapper orderDetailMapper, OrderDetailRepository orderDetailRepository) {
+    public OrderDetailServiceImpl(OrderDetailMapper orderDetailMapper, OrderDetailRepository orderDetailRepository,
+            PurchaseOrderRepository purchaseOrderRepository) {
         this.orderDetailMapper = orderDetailMapper;
         this.orderDetailRepository = orderDetailRepository;
+        this.purchaseOrderRepository = purchaseOrderRepository;
     }
 
     @Override
-    public OrderDetailDTO createOrderDetail(OrderDetailDTO orderDetailDTO) {
+    public OrderDetailDTO createOrderDetail(@RequestBody OrderDetailDTO orderDetailDTO) {
         OrderDetail orderDetail = orderDetailMapper.toEntity(orderDetailDTO);
+
+        // Validación para evitar un valor null en quantity
+        if (orderDetail.getQuantity() == null) {
+            orderDetail.setQuantity(1); // Puedes cambiar 1 por el valor predeterminado que desees
+        }
+
+        // Asignar PurchaseOrder desde el ID en el DTO
+        if (orderDetailDTO.getPurchaseOrderId() != null) {
+            PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(orderDetailDTO.getPurchaseOrderId())
+                    .orElse(null);
+            if (purchaseOrder != null) {
+                orderDetail.setPurchaseOrder(purchaseOrder);
+            }
+        }
+
         OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
         return orderDetailMapper.toDTO(savedOrderDetail);
     }
-
 
     @Override
     public OrderDetailDTO getOrderDetailById(Long id) {
@@ -37,7 +57,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
         return orderDetailMapper.toDTO(orderDetail);
     }
-
 
     @Override
     public List<OrderDetailDTO> getAllOrderDetails() {
@@ -50,7 +69,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return orderDetailDTOs;
     }
 
-
     @Override
     public OrderDetailDTO updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO) {
         OrderDetail existingOrderDetail = orderDetailRepository.findById(id).orElse(null);
@@ -61,11 +79,19 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         // Actualiza los campos
         existingOrderDetail.setQuantity(orderDetailDTO.getQuantity());
 
-        // Guarda y retorna el OrderDetail actualizado  
+        // Asignar PurchaseOrder desde el ID en el DTO
+        if (orderDetailDTO.getPurchaseOrderId() != null) {
+            PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(orderDetailDTO.getPurchaseOrderId())
+                    .orElse(null);
+            if (purchaseOrder != null) {
+                existingOrderDetail.setPurchaseOrder(purchaseOrder);
+            }
+        }
+
+        // Guarda y retorna el OrderDetail actualizado
         OrderDetail updatedOrderDetail = orderDetailRepository.save(existingOrderDetail);
         return orderDetailMapper.toDTO(updatedOrderDetail);
     }
-
 
     @Override
     public void deleteOrderDetail(Long id) {
