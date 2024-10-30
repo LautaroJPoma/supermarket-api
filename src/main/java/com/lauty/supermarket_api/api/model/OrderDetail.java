@@ -20,6 +20,18 @@ public class OrderDetail {
     @JoinColumn(name = "purchase_order_id")
     private PurchaseOrder purchaseOrder;
 
+    @ManyToOne // Relación con Product
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public PurchaseOrder getPurchaseOrder() {
         return purchaseOrder;
     }

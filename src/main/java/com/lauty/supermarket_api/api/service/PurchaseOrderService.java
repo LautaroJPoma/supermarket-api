@@ -10,4 +10,5 @@ public interface PurchaseOrderService {
     PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDTO);
     PurchaseOrderDTO updatePurchaseOrder(Long id,PurchaseOrderDTO purchaseOrderDTO);
     void deletePurchaseOrder(Long id);
+    void updateTotal(PurchaseOrderDTO purchaseOrderDTO);
 }

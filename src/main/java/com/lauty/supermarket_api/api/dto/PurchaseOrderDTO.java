@@ -2,12 +2,17 @@ package com.lauty.supermarket_api.api.dto;
 
 import java.util.List;
 
+
+
 public class PurchaseOrderDTO {
 
     private Long id;
     private Double total;
     private Long clientId;
-    private List<Long> orderDetailIds;
+    private List<OrderDetailDTO> orderDetails;
+   
+
+    
     public Long getId() {
         return id;
     }
@@ -26,11 +31,14 @@ public class PurchaseOrderDTO {
     public void setClientId(Long clientId) {
         this.clientId = clientId;
     }
-    public List<Long> getOrderDetailIds() {
-        return orderDetailIds;
+   
+    
+
+    public List<OrderDetailDTO> getOrderDetails() {
+        return orderDetails;
     }
-    public void setOrderDetailIds(List<Long> orderDetailIds) {
-        this.orderDetailIds = orderDetailIds;
+    public void setOrderDetails(List<OrderDetailDTO> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     

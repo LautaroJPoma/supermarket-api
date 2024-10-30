@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.lauty.supermarket_api.api.dto.OrderDetailDTO;
 import com.lauty.supermarket_api.api.mapper.OrderDetailMapper;
 import com.lauty.supermarket_api.api.model.OrderDetail;
+import com.lauty.supermarket_api.api.model.Product;
 import com.lauty.supermarket_api.api.model.PurchaseOrder;
 import com.lauty.supermarket_api.api.repository.OrderDetailRepository;
+import com.lauty.supermarket_api.api.repository.ProductRepository;
 import com.lauty.supermarket_api.api.repository.PurchaseOrderRepository;
 
 @Service
@@ -19,12 +21,14 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
     private final OrderDetailMapper orderDetailMapper;
     private final PurchaseOrderRepository purchaseOrderRepository;
+    private final ProductRepository productRepository;
 
     public OrderDetailServiceImpl(OrderDetailMapper orderDetailMapper, OrderDetailRepository orderDetailRepository,
-            PurchaseOrderRepository purchaseOrderRepository) {
+            PurchaseOrderRepository purchaseOrderRepository, ProductRepository productRepository) {
         this.orderDetailMapper = orderDetailMapper;
         this.orderDetailRepository = orderDetailRepository;
         this.purchaseOrderRepository = purchaseOrderRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -42,6 +46,15 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                     .orElse(null);
             if (purchaseOrder != null) {
                 orderDetail.setPurchaseOrder(purchaseOrder);
+            }
+        }
+
+        // Asignar Product desde el ID en el DTO
+        if (orderDetailDTO.getProductId() != null) {
+            Product product = productRepository.findById(orderDetailDTO.getProductId())
+                    .orElse(null);
+            if (product != null) {
+                orderDetail.setProduct(product);
             }
         }
 

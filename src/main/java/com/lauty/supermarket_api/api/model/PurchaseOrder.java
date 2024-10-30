@@ -17,7 +17,7 @@ public class PurchaseOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Double total;
-
+    
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
