@@ -7,7 +7,6 @@ import com.lauty.supermarket_api.api.service.OrderDetailService;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class OrderDetailController {
     public ResponseEntity<List<OrderDetailDTO>> getAllOrderDetails() {
         List<OrderDetailDTO> orderDetails = orderDetailService.getAllOrderDetails();
         return new ResponseEntity<>(orderDetails, HttpStatus.OK);
-    }   
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetailDTO> getOrderDetailById(@PathVariable Long id) {
@@ -38,15 +37,15 @@ public class OrderDetailController {
         return new ResponseEntity<>(orderDetail, HttpStatus.OK);
     }
 
-
-    @PostMapping 
+    @PostMapping
     public ResponseEntity<OrderDetailDTO> createOrderDetail(@RequestBody OrderDetailDTO orderDetailDTO) {
         OrderDetailDTO createdOrderDetail = orderDetailService.createOrderDetail(orderDetailDTO);
         return new ResponseEntity<>(createdOrderDetail, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")    
-    public ResponseEntity<OrderDetailDTO> updateOrderDetail(@PathVariable Long id, @RequestBody OrderDetailDTO orderDetailDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderDetailDTO> updateOrderDetail(@PathVariable Long id,
+            @RequestBody OrderDetailDTO orderDetailDTO) {
         OrderDetailDTO updatedOrderDetail = orderDetailService.updateOrderDetail(id, orderDetailDTO);
         return new ResponseEntity<>(updatedOrderDetail, HttpStatus.OK);
     }
@@ -58,5 +57,3 @@ public class OrderDetailController {
     }
 
 }
-    
-

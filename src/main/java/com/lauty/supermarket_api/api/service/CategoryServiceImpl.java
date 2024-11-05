@@ -15,7 +15,7 @@ public class CategoryServiceImpl implements CategoryService {
     public final CategoryRepository categoryRepository;
     public final CategoryMapper categoryMapper;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper){
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
@@ -55,7 +55,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
         existingCategory.setName(categoryDTO.getName());
         existingCategory.setDescription(categoryDTO.getDescription());
-
 
         Category updatedCategory = categoryRepository.save(existingCategory);
         return categoryMapper.toDTO(updatedCategory);

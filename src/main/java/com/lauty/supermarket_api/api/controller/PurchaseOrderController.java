@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
 @RestController
 @RequestMapping("/api/purchaseOrder")
 public class PurchaseOrderController {
@@ -35,7 +34,7 @@ public class PurchaseOrderController {
     @GetMapping("/{id}")
     public ResponseEntity<PurchaseOrderDTO> getPurchaseOrderById(@PathVariable Long id) {
         PurchaseOrderDTO purchaseOrder = purchaseOrderService.getPurchaseOrderById(id);
-        return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);  
+        return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
 
     @PostMapping
@@ -46,17 +45,15 @@ public class PurchaseOrderController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PurchaseOrderDTO> updatePurchaseOrder(
-        @PathVariable Long id, @RequestBody PurchaseOrderDTO purchaseOrderDTO) {
-    PurchaseOrderDTO updatedPurchaseOrder = purchaseOrderService.updatePurchaseOrder(id, purchaseOrderDTO);
-    return new ResponseEntity<>(updatedPurchaseOrder, HttpStatus.OK);
-}
-
+            @PathVariable Long id, @RequestBody PurchaseOrderDTO purchaseOrderDTO) {
+        PurchaseOrderDTO updatedPurchaseOrder = purchaseOrderService.updatePurchaseOrder(id, purchaseOrderDTO);
+        return new ResponseEntity<>(updatedPurchaseOrder, HttpStatus.OK);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePurchaseOrder(@PathVariable Long id) {
         purchaseOrderService.deletePurchaseOrder(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
-    
+
 }

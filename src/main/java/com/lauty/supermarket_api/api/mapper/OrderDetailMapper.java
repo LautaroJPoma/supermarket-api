@@ -13,14 +13,13 @@ public class OrderDetailMapper {
         orderDetailDTO.setId(orderDetail.getId());
         orderDetailDTO.setQuantity(orderDetail.getQuantity());
 
-        
         // Verificación de nulidad para evitar NullPointerException
         if (orderDetail.getPurchaseOrder() != null) {
             orderDetailDTO.setPurchaseOrderId(orderDetail.getPurchaseOrder().getId());
         } else {
             orderDetailDTO.setPurchaseOrderId(null);
         }
-        
+
         if (orderDetail.getProduct() != null) {
             orderDetailDTO.setProductId(orderDetail.getProduct().getId());
         } else {
@@ -28,10 +27,9 @@ public class OrderDetailMapper {
         }
 
         // Asignar el precio del producto
-    if (orderDetail.getProduct() != null) {
-        orderDetailDTO.setProductPrice(orderDetail.getProduct().getPrice());
-    }
-
+        if (orderDetail.getProduct() != null) {
+            orderDetailDTO.setProductPrice(orderDetail.getProduct().getPrice());
+        }
 
         return orderDetailDTO;
     }

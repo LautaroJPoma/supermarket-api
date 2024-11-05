@@ -56,7 +56,6 @@ public class OrderDetail {
         this.id = id;
     }
 
-
     public Integer getQuantity() {
         return quantity;
     }

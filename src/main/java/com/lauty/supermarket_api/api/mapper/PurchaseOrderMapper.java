@@ -7,7 +7,6 @@ import com.lauty.supermarket_api.api.dto.PurchaseOrderDTO;
 import com.lauty.supermarket_api.api.model.OrderDetail;
 import com.lauty.supermarket_api.api.model.PurchaseOrder;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +15,9 @@ public class PurchaseOrderMapper {
 
     private final OrderDetailMapper orderDetailMapper;
 
-public PurchaseOrderMapper(OrderDetailMapper orderDetailMapper) {
-    this.orderDetailMapper = orderDetailMapper;
-}
-
+    public PurchaseOrderMapper(OrderDetailMapper orderDetailMapper) {
+        this.orderDetailMapper = orderDetailMapper;
+    }
 
     public PurchaseOrderDTO toDTO(PurchaseOrder purchaseOrder) {
         PurchaseOrderDTO purchaseOrderDTO = new PurchaseOrderDTO();
@@ -46,15 +44,16 @@ public PurchaseOrderMapper(OrderDetailMapper orderDetailMapper) {
         purchaseOrder.setId(purchaseOrderDTO.getId());
         purchaseOrder.setTotal(purchaseOrderDTO.getTotal());
 
-        // Mapeo de OrderDetailDTO a OrderDetail
+        // Mapea solo si orderDetails no es null
         List<OrderDetail> orderDetails = new ArrayList<>();
-        for (OrderDetailDTO orderDetailDTO : purchaseOrderDTO.getOrderDetails()) {
-            orderDetails.add(orderDetailMapper.toEntity(orderDetailDTO));
+        if (purchaseOrderDTO.getOrderDetails() != null) {
+            for (OrderDetailDTO orderDetailDTO : purchaseOrderDTO.getOrderDetails()) {
+                orderDetails.add(orderDetailMapper.toEntity(orderDetailDTO));
+            }
         }
         purchaseOrder.setOrderDetails(orderDetails);
 
         return purchaseOrder;
     }
+
 }
-
-

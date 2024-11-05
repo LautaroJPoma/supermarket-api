@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
@@ -31,7 +29,7 @@ public class ClientController {
         List<ClientDTO> clients = clientService.getAllClients();
         return ResponseEntity.ok(clients);
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
         ClientDTO client = clientService.getClientById(id);
@@ -55,5 +53,5 @@ public class ClientController {
         clientService.deleteClient(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
 }

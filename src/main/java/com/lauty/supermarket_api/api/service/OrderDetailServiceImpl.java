@@ -22,13 +22,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     private final OrderDetailMapper orderDetailMapper;
     private final PurchaseOrderRepository purchaseOrderRepository;
     private final ProductRepository productRepository;
+    private final PurchaseOrderService purchaseOrderService;
 
     public OrderDetailServiceImpl(OrderDetailMapper orderDetailMapper, OrderDetailRepository orderDetailRepository,
-            PurchaseOrderRepository purchaseOrderRepository, ProductRepository productRepository) {
+            PurchaseOrderRepository purchaseOrderRepository, ProductRepository productRepository,
+            PurchaseOrderService purchaseOrderService) {
         this.orderDetailMapper = orderDetailMapper;
         this.orderDetailRepository = orderDetailRepository;
         this.purchaseOrderRepository = purchaseOrderRepository;
         this.productRepository = productRepository;
+        this.purchaseOrderService = purchaseOrderService;
     }
 
     @Override
@@ -40,9 +43,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             orderDetail.setQuantity(1); // Puedes cambiar 1 por el valor predeterminado que desees
         }
 
+        PurchaseOrder purchaseOrder = null;
         // Asignar PurchaseOrder desde el ID en el DTO
         if (orderDetailDTO.getPurchaseOrderId() != null) {
-            PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(orderDetailDTO.getPurchaseOrderId())
+            purchaseOrder = purchaseOrderRepository.findById(orderDetailDTO.getPurchaseOrderId())
                     .orElse(null);
             if (purchaseOrder != null) {
                 orderDetail.setPurchaseOrder(purchaseOrder);
@@ -59,6 +63,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         }
 
         OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
+
+        // Actualiza el total de la PurchaseOrder
+        if (purchaseOrder != null) {
+            // Agrega el OrderDetail a la PurchaseOrder
+            purchaseOrder.getOrderDetails().add(savedOrderDetail);
+            purchaseOrderService.updateTotal(purchaseOrder); // Llama al método para actualizar el total
+        }
         return orderDetailMapper.toDTO(savedOrderDetail);
     }
 
@@ -103,6 +114,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         // Guarda y retorna el OrderDetail actualizado
         OrderDetail updatedOrderDetail = orderDetailRepository.save(existingOrderDetail);
+
+        // Llama a updateTotal para actualizar el total en PurchaseOrder
+        PurchaseOrder purchaseOrder = existingOrderDetail.getPurchaseOrder();
+        if (purchaseOrder != null) {
+            purchaseOrderService.updateTotal(purchaseOrder); // Actualiza el total de la orden de compra
+        }
+
         return orderDetailMapper.toDTO(updatedOrderDetail);
     }
 
