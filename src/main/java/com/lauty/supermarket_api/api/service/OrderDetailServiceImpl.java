@@ -131,4 +131,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             orderDetailRepository.delete(orderDetail); // Solo se elimina si existe
         }
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return orderDetailRepository.existsById(id); // Delegar al repositorio
+    }
 }

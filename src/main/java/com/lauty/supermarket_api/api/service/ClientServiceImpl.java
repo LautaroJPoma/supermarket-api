@@ -74,4 +74,9 @@ public class ClientServiceImpl implements ClientService {
             clientRepository.delete(client); // Solo se elimina si existe
         }
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return clientRepository.existsById(id); 
+    }
 }

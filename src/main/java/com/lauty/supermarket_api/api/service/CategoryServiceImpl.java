@@ -68,4 +68,9 @@ public class CategoryServiceImpl implements CategoryService {
         }
         categoryRepository.delete(category);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return categoryRepository.existsById(id); // Delegar al repositorio
+    }
 }

@@ -77,4 +77,9 @@ public class ProductServiceImpl implements ProductService {
             productRepository.delete(product); // Solo se elimina si existe
         }
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return productRepository.existsById(id); // Delegar al repositorio
+    }
 }

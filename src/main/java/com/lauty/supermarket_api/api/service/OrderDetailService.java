@@ -14,4 +14,6 @@ public interface OrderDetailService {
     OrderDetailDTO updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO);
 
     void deleteOrderDetail(Long id);
+
+    boolean existsById(Long id);
 }

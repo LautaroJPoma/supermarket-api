@@ -14,4 +14,6 @@ public interface ClientService {
     ClientDTO updateClient(Long id, ClientDTO clientDTO);
 
     void deleteClient(Long id);
+
+    boolean existsById(Long id);
 }

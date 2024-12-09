@@ -126,4 +126,9 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             purchaseOrderRepository.delete(purchaseOrder);
         }
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return purchaseOrderRepository.existsById(id); // Delegar al repositorio
+    }
 }
