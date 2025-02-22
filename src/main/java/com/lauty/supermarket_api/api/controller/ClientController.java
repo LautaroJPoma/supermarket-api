@@ -19,6 +19,7 @@ import com.lauty.supermarket_api.api.service.ClientService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,8 +34,8 @@ public class ClientController {
 
     @Operation(summary = "Obtiene todos los clientes", description = "Obtiene todos los clientes existentes en la base de datos")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Clientes encontrados"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Clientes obtenidos correctamente", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @GetMapping
     public ResponseEntity<List<ClientDTO>> getAllClients() {
@@ -42,11 +43,11 @@ public class ClientController {
         return ResponseEntity.ok(clients);
     }
 
-    @Operation(summary = "Obtiene un cliente existente", description = "Obtiene un cliente por su ID")
+    @Operation(summary = "Obtiene un cliente existente", description = "Obtiene un cliente existente utilizando su ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @GetMapping("/{id}")
     public ResponseEntity<ClientDTO> getClientById(@PathVariable Long id) {
@@ -59,9 +60,9 @@ public class ClientController {
 
     @Operation(summary = "Crea un nuevo cliente", description = "Crea un nuevo cliente")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Cliente creado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "201", description = "Cliente creado correctamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PostMapping
     public ResponseEntity<ClientDTO> createClient(@RequestBody ClientDTO clientDTO) {
@@ -80,12 +81,12 @@ public class ClientController {
         return new ResponseEntity<>(createdClient, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Actualiza un cliente existente", description = "Actualiza un cliente por su ID")
+    @Operation(summary = "Actualiza un cliente existente", description = "Actualiza los datos de un cliente existente utilizando su ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cliente actualizado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Cliente actualizado exitosamente", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PutMapping("/{id}")
     public ResponseEntity<ClientDTO> updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
@@ -107,11 +108,11 @@ public class ClientController {
         return new ResponseEntity<>(updatedClient, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina un cliente existente", description = "Elimina un cliente por su ID")
+    @Operation(summary = "Elimina un cliente existente", description = "Elimina un cliente existente utilizando su ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Cliente eliminado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "204", description = "Cliente eliminado exitosamente", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado",content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor",content = @Content())
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {

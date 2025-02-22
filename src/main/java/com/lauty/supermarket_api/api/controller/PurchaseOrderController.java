@@ -14,6 +14,9 @@ import com.lauty.supermarket_api.api.exception.ResourceNotFoundException;
 import com.lauty.supermarket_api.api.service.PurchaseOrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,20 +33,37 @@ public class PurchaseOrderController {
     private PurchaseOrderService purchaseOrderService;
 
     @Operation(summary = "Obtiene todas las órdenes de compra", description = "Obtiene todas las órdenes de compra existentes en la base de datos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ordenes de compra obtenidas correctamente", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+    })
     @GetMapping
     public ResponseEntity<List<PurchaseOrderDTO>> getAllPurchaseOrders() {
         List<PurchaseOrderDTO> purchaseOrders = purchaseOrderService.getAllPurchaseOrders();
         return new ResponseEntity<>(purchaseOrders, HttpStatus.OK);
     }
 
-    @Operation(summary = "Obtiene una orden de compra por su ID", description = "Obtiene una orden de compra por su ID")
+    @Operation(summary = "Obtiene una orden de compra por su ID", description = "Obtiene una orden de compra utilizando su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Orden de compra encontrada", content = @Content()),
+        @ApiResponse(responseCode = "404", description = "Orden de compra no encontrada", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+})
     @GetMapping("/{id}")
     public ResponseEntity<PurchaseOrderDTO> getPurchaseOrderById(@PathVariable Long id) {
         PurchaseOrderDTO purchaseOrder = purchaseOrderService.getPurchaseOrderById(id);
+        if (purchaseOrder == null) {
+            throw new ResourceNotFoundException("Orden de compra con ID " + id + " no encontrada");
+        }
         return new ResponseEntity<>(purchaseOrder, HttpStatus.OK);
     }
 
     @Operation(summary = "Crea una nueva orden de compra", description = "Crea una nueva orden de compra")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Orden de compra creada exitosamente", content = @Content()),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida ", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+})
     @PostMapping
     public ResponseEntity<PurchaseOrderDTO> createPurchaseOrder(@RequestBody PurchaseOrderDTO purchaseOrderDTO) {
         // Validación básica de clientId (suponiendo que el clientId es obligatorio)
@@ -56,7 +76,14 @@ public class PurchaseOrderController {
         return new ResponseEntity<>(createdPurchaseOrder, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Actualiza una orden de compra existente", description = "Actualiza una orden de compra por su ID")
+    @Operation(summary = "Actualiza una orden de compra existente", description = "Actualiza los datos de una orden de compra existente utilizando su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Orden de compra actualizada correctamente", content = @Content()),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+        @ApiResponse(responseCode = "404", description = "Orden de compra no encontrada", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+    })
+    
     @PutMapping("/{id}")
     public ResponseEntity<PurchaseOrderDTO> updatePurchaseOrder(
             @PathVariable Long id, @RequestBody PurchaseOrderDTO purchaseOrderDTO) {
@@ -70,7 +97,12 @@ public class PurchaseOrderController {
         return new ResponseEntity<>(updatedPurchaseOrder, HttpStatus.OK);
     }
 
-    @Operation(summary = "Elimina una orden de compra existente", description = "Elimina una orden de compra por su ID")
+    @Operation(summary = "Elimina una orden de compra existente", description = "Elimina una orden de compra existente utilizando su ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Orden de compra eliminada correctamente", content = @Content()),
+        @ApiResponse(responseCode = "404", description = "Orden de compra no encontrada", content = @Content()),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePurchaseOrder(@PathVariable Long id) {
         if (!purchaseOrderService.existsById(id)) {
