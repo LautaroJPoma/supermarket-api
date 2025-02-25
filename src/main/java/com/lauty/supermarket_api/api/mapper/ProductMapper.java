@@ -12,7 +12,7 @@ import com.lauty.supermarket_api.api.repository.CategoryRepository;
 public class ProductMapper {
 
     @Autowired
-    private CategoryRepository categoryRepository; // Inyecta el repositorio de categorías
+    private CategoryRepository categoryRepository;
 
     public Product toEntity(ProductDTO productDTO) {
         Product product = new Product();
@@ -22,7 +22,6 @@ public class ProductMapper {
         product.setPrice(productDTO.getPrice());
         product.setQuantity(productDTO.getQuantity());
 
-        // Aquí buscamos la categoría por su ID y la asignamos al producto
         if (productDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(productDTO.getCategoryId())
                     .orElseThrow(() -> new RuntimeException("Category not found"));

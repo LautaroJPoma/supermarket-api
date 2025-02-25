@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.lauty.supermarket_api.api.dto.OrderDetailDTO;
+import com.lauty.supermarket_api.api.exception.ResourceNotFoundException;
 import com.lauty.supermarket_api.api.mapper.OrderDetailMapper;
 import com.lauty.supermarket_api.api.model.OrderDetail;
 import com.lauty.supermarket_api.api.model.Product;
@@ -14,6 +15,8 @@ import com.lauty.supermarket_api.api.model.PurchaseOrder;
 import com.lauty.supermarket_api.api.repository.OrderDetailRepository;
 import com.lauty.supermarket_api.api.repository.ProductRepository;
 import com.lauty.supermarket_api.api.repository.PurchaseOrderRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
@@ -34,42 +37,72 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         this.purchaseOrderService = purchaseOrderService;
     }
 
+    @Transactional
     @Override
     public OrderDetailDTO createOrderDetail(@RequestBody OrderDetailDTO orderDetailDTO) {
         OrderDetail orderDetail = orderDetailMapper.toEntity(orderDetailDTO);
 
-        // Validación para evitar un valor null en quantity
         if (orderDetail.getQuantity() == null) {
-            orderDetail.setQuantity(1); // Puedes cambiar 1 por el valor predeterminado que desees
+            orderDetail.setQuantity(1);
         }
 
         PurchaseOrder purchaseOrder = null;
-        // Asignar PurchaseOrder desde el ID en el DTO
+
         if (orderDetailDTO.getPurchaseOrderId() != null) {
             purchaseOrder = purchaseOrderRepository.findById(orderDetailDTO.getPurchaseOrderId())
                     .orElse(null);
             if (purchaseOrder != null) {
                 orderDetail.setPurchaseOrder(purchaseOrder);
+            } else {
+                throw new ResourceNotFoundException("PurchaseOrder no encontrada");
             }
         }
 
-        // Asignar Product desde el ID en el DTO
         if (orderDetailDTO.getProductId() != null) {
             Product product = productRepository.findById(orderDetailDTO.getProductId())
                     .orElse(null);
             if (product != null) {
                 orderDetail.setProduct(product);
+            } else {
+                throw new ResourceNotFoundException("Producto no encontrado");
             }
         }
 
         OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
 
-        // Actualiza el total de la PurchaseOrder
         if (purchaseOrder != null) {
-            // Agrega el OrderDetail a la PurchaseOrder
+
             purchaseOrder.getOrderDetails().add(savedOrderDetail);
-            purchaseOrderService.updateTotal(purchaseOrder); // Llama al método para actualizar el total
+            purchaseOrderService.updateTotal(purchaseOrder);
         }
+
+        return orderDetailMapper.toDTO(savedOrderDetail);
+    }
+
+    @Override
+    public OrderDetailDTO addOrderDetailToPurchaseOrder(Long purchaseOrderId, OrderDetailDTO orderDetailDTO) {
+
+        PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(purchaseOrderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Orden de compra no encontrada"));
+
+        OrderDetail orderDetail = orderDetailMapper.toEntity(orderDetailDTO);
+
+        orderDetail.setPurchaseOrder(purchaseOrder);
+
+        if (orderDetailDTO.getProductId() != null) {
+            Product product = productRepository.findById(orderDetailDTO.getProductId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado"));
+            orderDetail.setProduct(product);
+        }
+
+        OrderDetail savedOrderDetail = orderDetailRepository.save(orderDetail);
+
+        purchaseOrder.getOrderDetails().add(savedOrderDetail);
+
+        purchaseOrderRepository.save(purchaseOrder);
+
+        purchaseOrderService.updateTotal(purchaseOrder);
+
         return orderDetailMapper.toDTO(savedOrderDetail);
     }
 
@@ -97,13 +130,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderDetailDTO updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO) {
         OrderDetail existingOrderDetail = orderDetailRepository.findById(id).orElse(null);
         if (existingOrderDetail == null) {
-            return null; // Retorna null si no se encuentra
+            return null;
         }
 
-        // Actualiza los campos
         existingOrderDetail.setQuantity(orderDetailDTO.getQuantity());
 
-        // Asignar PurchaseOrder desde el ID en el DTO
         if (orderDetailDTO.getPurchaseOrderId() != null) {
             PurchaseOrder purchaseOrder = purchaseOrderRepository.findById(orderDetailDTO.getPurchaseOrderId())
                     .orElse(null);
@@ -112,13 +143,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             }
         }
 
-        // Guarda y retorna el OrderDetail actualizado
         OrderDetail updatedOrderDetail = orderDetailRepository.save(existingOrderDetail);
 
-        // Llama a updateTotal para actualizar el total en PurchaseOrder
         PurchaseOrder purchaseOrder = existingOrderDetail.getPurchaseOrder();
         if (purchaseOrder != null) {
-            purchaseOrderService.updateTotal(purchaseOrder); // Actualiza el total de la orden de compra
+            purchaseOrderService.updateTotal(purchaseOrder);
         }
 
         return orderDetailMapper.toDTO(updatedOrderDetail);
@@ -128,12 +157,12 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public void deleteOrderDetail(Long id) {
         OrderDetail orderDetail = orderDetailRepository.findById(id).orElse(null);
         if (orderDetail != null) {
-            orderDetailRepository.delete(orderDetail); // Solo se elimina si existe
+            orderDetailRepository.delete(orderDetail);
         }
     }
 
     @Override
     public boolean existsById(Long id) {
-        return orderDetailRepository.existsById(id); // Delegar al repositorio
+        return orderDetailRepository.existsById(id);
     }
 }

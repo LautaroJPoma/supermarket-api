@@ -2,11 +2,17 @@ package com.lauty.supermarket_api.api.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class CategoryDTO {
 
+    @Schema(hidden = true)
     private Long id;
+
     private String name;
     private String description;
+
+    @Schema(hidden = true)
     private List<Long> productIds;
 
     public Long getId() {

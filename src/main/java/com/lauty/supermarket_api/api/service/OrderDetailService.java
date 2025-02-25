@@ -11,6 +11,8 @@ public interface OrderDetailService {
 
     OrderDetailDTO createOrderDetail(OrderDetailDTO orderDetailDTO);
 
+    public OrderDetailDTO addOrderDetailToPurchaseOrder(Long purchaseOrderId, OrderDetailDTO orderDetailDTO);
+
     OrderDetailDTO updateOrderDetail(Long id, OrderDetailDTO orderDetailDTO);
 
     void deleteOrderDetail(Long id);

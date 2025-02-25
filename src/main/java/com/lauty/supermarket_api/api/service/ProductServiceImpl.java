@@ -30,10 +30,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductById(Long id) {
-        // Busca el producto
+
         Product product = productRepository.findById(id).orElse(null);
         if (product == null) {
-            // Retorna null si no se encuentra
+
             return null;
         }
         return productMapper.toDTO(product);
@@ -44,7 +44,6 @@ public class ProductServiceImpl implements ProductService {
         Iterable<Product> productsIterable = productRepository.findAll();
         List<ProductDTO> productDTOs = new ArrayList<>();
 
-        // Convertir productos a DTOs
         for (Product product : productsIterable) {
             ProductDTO productDTO = productMapper.toDTO(product);
             productDTOs.add(productDTO);
@@ -57,15 +56,13 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(Long id, ProductDTO productDTO) {
         Product existingProduct = productRepository.findById(id).orElse(null);
         if (existingProduct == null) {
-            return null; // Retorna null si no se encuentra
+            return null;
         }
 
-        // Actualiza los campos
         existingProduct.setName(productDTO.getName());
         existingProduct.setDescription(productDTO.getDescription());
         existingProduct.setPrice(productDTO.getPrice());
 
-        // Guarda y retorna el producto actualizado
         Product updatedProduct = productRepository.save(existingProduct);
         return productMapper.toDTO(updatedProduct);
     }
@@ -74,12 +71,12 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
-            productRepository.delete(product); // Solo se elimina si existe
+            productRepository.delete(product);
         }
     }
 
     @Override
     public boolean existsById(Long id) {
-        return productRepository.existsById(id); // Delegar al repositorio
+        return productRepository.existsById(id);
     }
 }

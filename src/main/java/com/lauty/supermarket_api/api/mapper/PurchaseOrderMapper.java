@@ -24,17 +24,15 @@ public class PurchaseOrderMapper {
         purchaseOrderDTO.setId(purchaseOrder.getId());
         purchaseOrderDTO.setTotal(purchaseOrder.getTotal());
 
-        // Verificación para evitar NullPointerException si el cliente es nulo
         if (purchaseOrder.getClient() != null) {
             purchaseOrderDTO.setClientId(purchaseOrder.getClient().getId());
         }
 
-        // Mapeo de la lista de OrderDetail a OrderDetailDTO
         List<OrderDetailDTO> orderDetailDTOs = new ArrayList<>();
         for (OrderDetail orderDetail : purchaseOrder.getOrderDetails()) {
             orderDetailDTOs.add(orderDetailMapper.toDTO(orderDetail));
         }
-        purchaseOrderDTO.setOrderDetails(orderDetailDTOs); // Asegúrate de que el DTO tenga este campo
+        purchaseOrderDTO.setOrderDetails(orderDetailDTOs);
 
         return purchaseOrderDTO;
     }
@@ -44,7 +42,6 @@ public class PurchaseOrderMapper {
         purchaseOrder.setId(purchaseOrderDTO.getId());
         purchaseOrder.setTotal(purchaseOrderDTO.getTotal());
 
-        // Mapea solo si orderDetails no es null
         List<OrderDetail> orderDetails = new ArrayList<>();
         if (purchaseOrderDTO.getOrderDetails() != null) {
             for (OrderDetailDTO orderDetailDTO : purchaseOrderDTO.getOrderDetails()) {

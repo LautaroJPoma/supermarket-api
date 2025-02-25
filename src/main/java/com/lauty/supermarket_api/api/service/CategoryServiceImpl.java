@@ -7,17 +7,24 @@ import org.springframework.stereotype.Service;
 import com.lauty.supermarket_api.api.dto.CategoryDTO;
 import com.lauty.supermarket_api.api.mapper.CategoryMapper;
 import com.lauty.supermarket_api.api.model.Category;
+import com.lauty.supermarket_api.api.model.Product;
 import com.lauty.supermarket_api.api.repository.CategoryRepository;
+import com.lauty.supermarket_api.api.repository.ProductRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
     public final CategoryRepository categoryRepository;
     public final CategoryMapper categoryMapper;
+    public final ProductRepository productRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper,
+            ProductRepository productRepository) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -61,16 +68,24 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElse(null);
         if (category == null) {
             return;
         }
+        List<Product> products = productRepository.findByCategory(category);
+
+        for (Product product : products) {
+            product.setCategory(null);
+        }
+        productRepository.saveAll(products);
+
         categoryRepository.delete(category);
     }
 
     @Override
     public boolean existsById(Long id) {
-        return categoryRepository.existsById(id); // Delegar al repositorio
+        return categoryRepository.existsById(id);
     }
 }

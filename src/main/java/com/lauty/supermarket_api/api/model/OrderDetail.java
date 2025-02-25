@@ -17,10 +17,10 @@ public class OrderDetail {
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "purchase_order_id")
+    @JoinColumn(name = "purchase_order_id", nullable = false)
     private PurchaseOrder purchaseOrder;
 
-    @ManyToOne // Relación con Product
+    @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 

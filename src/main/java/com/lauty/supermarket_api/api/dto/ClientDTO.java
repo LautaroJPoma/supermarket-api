@@ -2,12 +2,18 @@ package com.lauty.supermarket_api.api.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ClientDTO {
 
+    @Schema(hidden = true)
     private Long id;
+
     private String name;
     private String email;
-    private List<Long> purcharseOrderIds;
+
+    @Schema(hidden = true)
+    private List<Long> purchaseOrderIds;
 
     public Long getId() {
         return id;
@@ -33,12 +39,12 @@ public class ClientDTO {
         this.email = email;
     }
 
-    public List<Long> getPurcharseOrderIds() {
-        return purcharseOrderIds;
+    public List<Long> getPurchaseOrderIds() {
+        return purchaseOrderIds;
     }
 
-    public void setPurcharseOrderIds(List<Long> purcharseOrderIds) {
-        this.purcharseOrderIds = purcharseOrderIds;
+    public void setPurchaseOrderIds(List<Long> purcharseOrderIds) {
+        this.purchaseOrderIds = purcharseOrderIds;
     }
 
 }

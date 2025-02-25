@@ -34,8 +34,8 @@ public class OrderDetailController {
 
     @Operation(summary = "Obtiene todos los detalles de órdenes", description = "Obtiene todos los detalles de órdenes existentes en la base de datos")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Detalles de orden encontrados", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Detalles de orden encontrados", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @GetMapping
     public ResponseEntity<List<OrderDetailDTO>> getAllOrderDetails() {
@@ -45,9 +45,9 @@ public class OrderDetailController {
 
     @Operation(summary = "Obtiene un detalle de orden existente", description = "Obtiene un detalle de orden existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Detalle de orden encontrado", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Detalle de orden no encontrado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Detalle de orden encontrado", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Detalle de orden no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetailDTO> getOrderDetailById(@PathVariable Long id) {
@@ -60,9 +60,9 @@ public class OrderDetailController {
 
     @Operation(summary = "Crea un nuevo detalle de orden", description = "Crea un nuevo detalle de orden")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Detalle de orden creado exitosamente", content = @Content()),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "201", description = "Detalle de orden creado exitosamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PostMapping
     public ResponseEntity<OrderDetailDTO> createOrderDetail(@RequestBody OrderDetailDTO orderDetailDTO) {
@@ -75,10 +75,6 @@ public class OrderDetailController {
             throw new BadRequestException("El ID de la orden de compra es obligatorio");
         }
 
-        if (orderDetailDTO.getProductPrice() == null || orderDetailDTO.getProductPrice() <= 0) {
-            throw new BadRequestException("El precio del producto debe ser mayor a 0");
-        }
-
         if (orderDetailDTO.getProductId() == null) {
             throw new BadRequestException("El ID del producto es obligatorio");
         }
@@ -89,13 +85,14 @@ public class OrderDetailController {
 
     @Operation(summary = "Actualiza un detalle de orden existente", description = "Actualiza un detalle de orden existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Detalle de orden actualizado exitosamente", content = @Content()),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Detalle de orden no encontrado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Detalle de orden actualizado exitosamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Detalle de orden no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDetailDTO> updateOrderDetail(@PathVariable Long id, @RequestBody OrderDetailDTO orderDetailDTO) {
+    public ResponseEntity<OrderDetailDTO> updateOrderDetail(@PathVariable Long id,
+            @RequestBody OrderDetailDTO orderDetailDTO) {
         if (!orderDetailService.existsById(id)) {
             throw new ResourceNotFoundException("Detalle de orden con ID " + id + " no encontrado");
         }
@@ -105,19 +102,15 @@ public class OrderDetailController {
             throw new BadRequestException("La cantidad debe ser mayor a 0");
         }
 
-        if (orderDetailDTO.getProductPrice() == null || orderDetailDTO.getProductPrice() <= 0) {
-            throw new BadRequestException("El precio del producto debe ser mayor a 0");
-        }
-
         OrderDetailDTO updatedOrderDetail = orderDetailService.updateOrderDetail(id, orderDetailDTO);
         return new ResponseEntity<>(updatedOrderDetail, HttpStatus.OK);
     }
 
     @Operation(summary = "Elimina un detalle de orden existente", description = "Elimina un detalle de orden existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Detalle de orden eliminado exitosamente", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Detalle de orden no encontrado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "204", description = "Detalle de orden eliminado exitosamente", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Detalle de orden no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrderDetail(@PathVariable Long id) {

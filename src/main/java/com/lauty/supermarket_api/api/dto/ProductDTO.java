@@ -1,8 +1,12 @@
 package com.lauty.supermarket_api.api.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ProductDTO {
 
+    @Schema(hidden = true)
     private Long id;
+
     private String name;
     private String description;
     private Double price;

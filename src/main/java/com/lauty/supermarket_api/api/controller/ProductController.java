@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products") // Ruta base para el recurso Product
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
@@ -37,10 +37,10 @@ public class ProductController {
 
     @Operation(summary = "Obtiene un producto existente", description = "Obtiene un producto existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Producto encontrado", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
-})
+            @ApiResponse(responseCode = "200", description = "Producto encontrado", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+    })
     @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         ProductDTO product = productService.getProductById(id);
@@ -52,10 +52,10 @@ public class ProductController {
 
     @Operation(summary = "Crea un nuevo producto", description = "Crea un nuevo producto")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Producto creado exitosamente", content = @Content()),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
-})
+            @ApiResponse(responseCode = "201", description = "Producto creado exitosamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+    })
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         ProductDTO newProduct = productService.createProduct(productDTO);
@@ -83,10 +83,10 @@ public class ProductController {
 
     @Operation(summary = "Actualiza un producto existente", description = "Actualiza los datos de un producto existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Producto actualizado correctamente", content = @Content()),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Porducto no encontrado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Producto actualizado correctamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Porducto no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody ProductDTO productDTO) {
@@ -120,9 +120,9 @@ public class ProductController {
     @Operation(summary = "Elimina un producto existente", description = "Elimina un producto existente utilizando su ID")
     @DeleteMapping("/{id}")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Producto eliminado correctamente", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "204", description = "Producto eliminado correctamente", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         if (!productService.existsById(id)) {

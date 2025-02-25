@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.lauty.supermarket_api.api.dto.PurchaseOrderDTO;
+
 import com.lauty.supermarket_api.api.mapper.PurchaseOrderMapper;
 import com.lauty.supermarket_api.api.model.PurchaseOrder;
 import com.lauty.supermarket_api.api.repository.ClientRepository;
+
 import com.lauty.supermarket_api.api.repository.ProductRepository;
 import com.lauty.supermarket_api.api.repository.PurchaseOrderRepository;
 import com.lauty.supermarket_api.api.model.Client;
@@ -31,12 +33,10 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         this.productRepository = productRepository;
     }
 
-    // Método para actualizar el total de la PurchaseOrder
     @Override
     public void updateTotal(PurchaseOrder purchaseOrder) {
         double total = 0.0;
 
-        // Calcula el total directamente usando OrderDetails en la entidad PurchaseOrder
         for (OrderDetail orderDetail : purchaseOrder.getOrderDetails()) {
             Product product = productRepository.findById(orderDetail.getProduct().getId()).orElse(null);
             if (product != null) {
@@ -50,20 +50,17 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public PurchaseOrderDTO createPurchaseOrder(PurchaseOrderDTO purchaseOrderDTO) {
+
         PurchaseOrder purchaseOrder = purchaseOrderMapper.toEntity(purchaseOrderDTO);
 
-        // Recuperar el cliente y asignarlo a la orden de compra
         Client client = clientRepository.findById(purchaseOrderDTO.getClientId()).orElse(null);
         if (client != null) {
             purchaseOrder.setClient(client);
         }
 
-        // Guardar la orden antes de calcular el total
         PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.save(purchaseOrder);
 
-        // Llamar a updateTotal para calcular el total y guardar nuevamente
         updateTotal(savedPurchaseOrder);
-        savedPurchaseOrder = purchaseOrderRepository.save(savedPurchaseOrder);
 
         return purchaseOrderMapper.toDTO(savedPurchaseOrder);
     }
@@ -74,16 +71,13 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             throw new IllegalArgumentException("El ID de la orden de compra no puede ser null");
         }
 
-        // Buscar la orden de compra existente
         PurchaseOrder existingPurchaseOrder = purchaseOrderRepository.findById(id).orElse(null);
         if (existingPurchaseOrder == null) {
-            return null; // Retorna null si no se encuentra
+            return null;
         }
 
-        // Actualizar los detalles de la compra usando el DTO
         existingPurchaseOrder.setTotal(purchaseOrderDTO.getTotal());
 
-        // Asignar el cliente si el clientId está presente en el DTO
         if (purchaseOrderDTO.getClientId() != null) {
             Client client = clientRepository.findById(purchaseOrderDTO.getClientId()).orElse(null);
             if (client != null) {
@@ -93,7 +87,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
             }
         }
 
-        // Llamar a updateTotal para calcular el total y guardar nuevamente
         updateTotal(existingPurchaseOrder);
         PurchaseOrder updatedPurchaseOrder = purchaseOrderRepository.save(existingPurchaseOrder);
 
@@ -129,6 +122,6 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
 
     @Override
     public boolean existsById(Long id) {
-        return purchaseOrderRepository.existsById(id); // Delegar al repositorio
+        return purchaseOrderRepository.existsById(id);
     }
 }

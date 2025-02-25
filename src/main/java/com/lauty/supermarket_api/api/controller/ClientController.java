@@ -111,8 +111,8 @@ public class ClientController {
     @Operation(summary = "Elimina un cliente existente", description = "Elimina un cliente existente utilizando su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Cliente eliminado exitosamente", content = @Content()),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado",content = @Content()),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor",content = @Content())
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Long id) {

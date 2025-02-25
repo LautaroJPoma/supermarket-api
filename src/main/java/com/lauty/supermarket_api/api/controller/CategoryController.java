@@ -5,7 +5,6 @@ import com.lauty.supermarket_api.api.dto.CategoryDTO;
 import com.lauty.supermarket_api.api.exception.BadRequestException;
 import com.lauty.supermarket_api.api.exception.ResourceNotFoundException;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +34,8 @@ public class CategoryController {
 
     @Operation(summary = "Obtiene todas las categorias", description = "Obtiene todas las categorias existentes en la base de datos")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Categorías obtenidas correctamente", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Categorías obtenidas correctamente", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @GetMapping()
     public ResponseEntity<List<CategoryDTO>> getAllCategories() {
@@ -46,9 +45,9 @@ public class CategoryController {
 
     @Operation(summary = "Obtiene una categoría por su ID", description = "Obtiene una categoría existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Categoría encontrada", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Categoría no encontrada", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Categoría encontrada", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Categoría no encontrada", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
@@ -61,9 +60,9 @@ public class CategoryController {
 
     @Operation(summary = "Crea una nueva categoría", description = "Crea una nueva categoría")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Categoría creada correctamente", content = @Content()),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "201", description = "Categoría creada correctamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PostMapping()
     public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO categoryDTO) {
@@ -79,10 +78,10 @@ public class CategoryController {
 
     @Operation(summary = "Actualiza una categoría existente", description = "Actualiza los datos de una categoría existente utilizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Categoría actualizada correctamente", content = @Content()),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Categoría no encontrada", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "200", description = "Categoría actualizada correctamente", content = @Content()),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Categoría no encontrada", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
@@ -103,9 +102,9 @@ public class CategoryController {
 
     @Operation(summary = "Elimina una categoría existente", description = "Elimina una categoría existente utlizando su ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Categoría eliminada correctamente", content = @Content()),
-        @ApiResponse(responseCode = "404", description = "Categoría no encontrada", content = @Content()),
-        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+            @ApiResponse(responseCode = "204", description = "Categoría eliminada correctamente", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Categoría no encontrada", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {

@@ -31,10 +31,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO getClientById(Long id) {
-        // Busca el cliente
+
         Client client = clientRepository.findById(id).orElse(null);
         if (client == null) {
-            // Retorna null si no se encuentra
+
             return null;
         }
         return clientMapper.toDTO(client);
@@ -55,14 +55,12 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO updateClient(Long id, ClientDTO clientDTO) {
         Client existingClient = clientRepository.findById(id).orElse(null);
         if (existingClient == null) {
-            return null; // Retorna null si no se encuentra
+            return null;
         }
 
-        // Actualiza los campos
         existingClient.setName(clientDTO.getName());
         existingClient.setEmail(clientDTO.getEmail());
 
-        // Guarda y retorna el cliente actualizado
         Client updatedClient = clientRepository.save(existingClient);
         return clientMapper.toDTO(updatedClient);
     }
@@ -71,12 +69,12 @@ public class ClientServiceImpl implements ClientService {
     public void deleteClient(Long id) {
         Client client = clientRepository.findById(id).orElse(null);
         if (client != null) {
-            clientRepository.delete(client); // Solo se elimina si existe
+            clientRepository.delete(client);
         }
     }
 
     @Override
     public boolean existsById(Long id) {
-        return clientRepository.existsById(id); 
+        return clientRepository.existsById(id);
     }
 }
