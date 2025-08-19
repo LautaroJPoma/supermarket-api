@@ -1,7 +1,7 @@
 package com.lauty.supermarket_api.api.mapper;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class ClientMapper {
             }
             clientDTO.setPurchaseOrderIds(purchaseOrderIds);
         } else {
-            clientDTO.setPurchaseOrderIds(Collections.emptyList());
+            clientDTO.setPurchaseOrderIds(new ArrayList<>());
         }
 
         return clientDTO;

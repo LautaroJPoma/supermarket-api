@@ -19,6 +19,7 @@ public class Product {
     private Double price;
     private Integer quantity;
 
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = true)
     private Category category;
