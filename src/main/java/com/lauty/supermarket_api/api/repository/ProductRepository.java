@@ -10,4 +10,6 @@ import com.lauty.supermarket_api.api.model.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByCategory(Category category);
+    List<Product> findByBrandId(Long brandId);
+
 }

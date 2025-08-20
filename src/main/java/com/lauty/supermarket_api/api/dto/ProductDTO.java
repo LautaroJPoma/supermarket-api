@@ -13,6 +13,8 @@ public class ProductDTO {
     private Long categoryId;
     private Integer quantity;
 
+    private Long brandId;
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -61,4 +63,14 @@ public class ProductDTO {
         this.categoryId = categoryId;
     }
 
+    public Long getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
+    }
+
+
+    
 }

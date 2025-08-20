@@ -9,6 +9,8 @@ public interface ProductService {
 
     List<ProductDTO> getAllProducts();
 
+    List<ProductDTO> getProductsByBrand(Long brandId);
+
     ProductDTO createProduct(ProductDTO productDTO);
 
     ProductDTO updateProduct(Long id, ProductDTO productDTO);

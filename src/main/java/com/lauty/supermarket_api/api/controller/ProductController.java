@@ -50,6 +50,18 @@ public class ProductController {
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtiene productos por marca", description = "Obtiene todos los productos de una marca específica utilizando su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Productos obtenidos correctamente", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Marca no encontrada", content = @Content()),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
+    })
+    @GetMapping("/brand/{brandId}")
+    public ResponseEntity<List<ProductDTO>> getProductsByBrand(@PathVariable Long brandId) {
+        List<ProductDTO> products = productService.getProductsByBrand(brandId);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
     @Operation(summary = "Crea un nuevo producto", description = "Crea un nuevo producto")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Producto creado exitosamente", content = @Content()),
@@ -85,7 +97,7 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Producto actualizado correctamente", content = @Content()),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content()),
-            @ApiResponse(responseCode = "404", description = "Porducto no encontrado", content = @Content()),
+            @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content()),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content())
     })
     @PutMapping("/{id}")
